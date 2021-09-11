@@ -1,0 +1,33 @@
+version: '3'
+services:
+  nginx-example:
+    image: nginx:latest
+    ports:
+      - 8080:80
+    volumes:
+      - ./www:/www
+      - ./config/site.conf:/etc/nginx/conf.d/default.conf
+  php-scsskid:
+    build:
+      context: .
+      dockerfile: Dockerfile-custom-php
+    image: php7-scsskid
+    volumes:
+      - ./www:/www
+  mariadb-example:
+    image: mariadb
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      MARIADB_ROOT_PASSWORD: example
+    volumes:
+      - mariadb-volume:/var/lib/mysql
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 4500:8080
+
+volumes:
+  mariadb-volume:
